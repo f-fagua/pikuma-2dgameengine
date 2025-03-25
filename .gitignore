@@ -1,0 +1,4 @@
+# Ignoring the build
+/2dgameengine/[Bb]in/
+
+*.DS_Store
