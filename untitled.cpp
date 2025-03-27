@@ -1,3 +1,14 @@
+// Game Class
+
+void Game::Run{
+	while (true) {
+		ProcessInput();
+		Update();
+		Render();
+	}
+}
+
+
 //Updating the /libs Folder
 
 #include <iostream>

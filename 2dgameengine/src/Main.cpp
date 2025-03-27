@@ -1,7 +1,12 @@
 #include <iostream>
+#include "Game.h"
 
-int main() {
-    //TODO: Do some magic!
-    
+int main(int argc, char* argv[]) {
+    Game game;
+
+    game.Initialize();
+    game.Run();
+    game.Destroy();
+
     return 0;
 }
