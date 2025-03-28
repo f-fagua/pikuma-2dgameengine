@@ -90,6 +90,12 @@ void Game::ProcessInput() {
 }
 
 void Game::Update() {
+	// If we are too fast, waste some time until we reach the MILISECS_PER_FRAME
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), milisecsPreviousFrame + MILLISECS_PER_FRAME));
+
+	// Store the current frane time
+	milisecsPreviousFrame = SDL_GetTicks();
+
 	playerPosition.x += playerVelocity.x;
 	playerPosition.y += playerVelocity.y;
 }
