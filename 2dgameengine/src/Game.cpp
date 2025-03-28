@@ -40,7 +40,7 @@ void Game::Initialize() {
 	renderer = SDL_CreateRenderer(
 		window, 	// to wich window it belongs to
 		-1,			// in which monitor it will be displayed (-1 == defautl)
-		0 			// other flags
+		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC 	// other flags
 	);
 
 	if (!renderer) {
