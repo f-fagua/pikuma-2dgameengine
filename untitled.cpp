@@ -1,3 +1,8 @@
+// --------------------------------
+// Logger Class
+// --------------------------------
+
+
 
 // --------------------------------
 // Deta time
@@ -8,10 +13,6 @@ double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0f;
 
 // Make the game object move 20 pixels per second
 playerPosition.x += 20 * deltaTime;
-
-
-
-
 
 
 // --------------------------------
