@@ -1,4 +1,22 @@
+
+// --------------------------------
+// Deta time
+// --------------------------------
+
+// Difference in ticks from the last frame, converted to seconds
+double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0f;
+
+// Make the game object move 20 pixels per second
+playerPosition.x += 20 * deltaTime;
+
+
+
+
+
+
+// --------------------------------
 // Game Class
+// --------------------------------
 
 void Game::Run{
 	while (true) {

@@ -70,7 +70,7 @@ glm::vec2 playerVelocity;
 
 void Game::Setup() {
 	playerPosition = glm::vec2(10.0, 20.0);
-	playerVelocity = glm::vec2(1.0, 0.0);
+	playerVelocity = glm::vec2(100.0, 5.0);
 }
 
 void Game::ProcessInput() {
@@ -91,16 +91,18 @@ void Game::ProcessInput() {
 
 void Game::Update() {
 	// If we are too fast, waste some time until we reach the MILISECS_PER_FRAME
-	int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - milisecsPreviousFrame);
+	int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
 	if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME){
 		SDL_Delay(timeToWait);
 	}
 
-	// Store the current frane time
-	milisecsPreviousFrame = SDL_GetTicks();
+	double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0f;
 
-	playerPosition.x += playerVelocity.x;
-	playerPosition.y += playerVelocity.y;
+	// Store the current frane time
+	millisecsPreviousFrame = SDL_GetTicks();
+
+	playerPosition.x += playerVelocity.x * deltaTime;
+	playerPosition.y += playerVelocity.y * deltaTime;
 }
 
 void Game::Render() {
