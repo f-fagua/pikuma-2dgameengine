@@ -1,9 +1,25 @@
+################################################################################
+# Declare some Makefile variables
+################################################################################
+CC = g++
+LANG_STD = -std=c++17
+COMPILER_FLAGS = -Wall -Wfatal-errors
+INCLUDE_PATH = -I"./libs/" -I/opt/homebrew/include
+SRC_FILES = ./src/*.cpp \
+			./src/Game/*.cpp \
+			./src/Logger/*.cpp
+LINKER_FLAGS = `sdl2-config --libs --cflags` -L/opt/homebrew/lib -llua -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm
+OBJ_NAME = bin/gameengine
+
+################################################################################
+# Declare some Makefile rules
+################################################################################
 build: 
 	mkdir -p bin
-	g++ -Wall -std=c++17 -I"./libs/" src/*.cpp `sdl2-config --libs --cflags` -I/opt/homebrew/include -L/opt/homebrew/lib -llua -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm -o bin/gameengine
+	$(CC) $(COMPILER_FLAGS) $(LANG_STD) $(INCLUDE_PATH) $(SRC_FILES) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
 run:
-	./bin/gameengine
+	./$(OBJ_NAME)
 
 clean:
-	rm bin/gameengine
+	rm $(OBJ_NAME)
