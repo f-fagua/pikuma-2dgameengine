@@ -1,8 +1,57 @@
 // --------------------------------
-// Logger Class
+// Component-Based Design
 // --------------------------------
 
+class Entity {
+	vector<Component*> components;
+	void AddComponent<T>(component);
+	void Update(deltaTime);
+	void Render();
+	...
+};
 
+class Component {
+	Entity owner;
+
+	virtual Update();
+	virtual Render();
+};
+
+class TransformComponent: public Component {
+	glm::vec2 position;
+	glm::vec2 scale;
+	double rotation;
+
+	Update() override {
+		/* TODO: ...*/
+	}
+
+	Render() override {
+		/* TODO: ...*/
+	}
+};
+
+class ColliderComponent: public Component {
+	SDL_Rect collider;
+
+	Update() override {
+		/* TODO: ...*/
+	}
+
+	Render() override {
+		/* TODO: ...*/
+	}
+};
+
+class Registry { // World - Entity Manager
+	vector<Entity*> entities;
+
+	void AddEntity(entity);
+	void RemoveEntity(entity);
+	void Update(deltaTime);
+	void Render();
+	...
+};
 
 // --------------------------------
 // Deta time
