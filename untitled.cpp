@@ -1,4 +1,42 @@
 // --------------------------------
+// Entity-Component-System Design
+// --------------------------------
+
+class Entity {
+	int id;
+};
+
+struct TransformComponent {
+	glm::vec2 position;
+	glm::vec2 scale;
+	double rotation;
+};
+
+struct VelocityComponent {
+	glm::vec2 velocity;
+};
+
+class MovementSystem {
+	public:
+		MovementSystem() {
+			RequireComponent<TransformComponent>();
+			RequireComponent<VelocityComponent>();
+		}
+
+		void Update(double deltaTime) {
+			for (auto entity: GetEntities()) {
+				VelocityComponent& velocity = entity.GetComponent<VelocityComponent>();
+				TransformComponent& transform = entity.GetComponent<TransformComponent>();
+
+				// Update entity's position on its velocity
+				transform.position.x += rigidbody.velocity.x * deltaTime;
+				transform.position.y += rigidbody.velocity.y * deltaTime; 
+			}
+		}
+};
+
+
+// --------------------------------
 // Component-Based Design
 // --------------------------------
 
