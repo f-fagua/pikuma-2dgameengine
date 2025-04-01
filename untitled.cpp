@@ -1,4 +1,31 @@
 // --------------------------------
+// System Component Signatures
+// --------------------------------
+
+const unsignet int MAX_COMPONENTS = 32;
+
+typedef std::bitset<MAX_COMPONENTS> Signature;
+
+class Entity {
+	int id;
+}
+
+class Component {
+	int id;
+}
+
+class System {
+	private:
+		// Which components and entity must have for the system to consider the entity
+		Signature componentSignature;
+
+		// List of all entities that the system is interested in
+		std::vector<Entity> entities;
+}
+
+
+
+// --------------------------------
 // Entity-Component-System Design
 // --------------------------------
 
