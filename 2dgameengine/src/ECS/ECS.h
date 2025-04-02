@@ -3,7 +3,7 @@
 
 #include <bitset>
 
-const unsignet int MAX_COMPONENTS = 32;
+const unsigned int MAX_COMPONENTS = 32;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Signature
@@ -51,7 +51,7 @@ class System {
 		void AddEntityToSystem(Entity entity);
 		void RemoveEntityFromSystem();
 		std::vector<Entity> GetSystemEntities() const;
-		Signature& GetComponentSignature() const;
+		const Signature& GetComponentSignature() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,35 @@
 // --------------------------------
+// Working with C++ Templates
+// --------------------------------
+
+class System {
+	private:
+		Signature componentSignature;
+		std::vector<Entity> entities;
+
+	public: 
+		System() = default;
+		~System() = default;
+
+		void AddEntityToSystem(Entity entity);
+		void RemoveEntityFromSystem();
+		std::vector<Entity> GetSystemEntities() const;
+		const Signature& GetComponentSignature() const;
+
+		// Define the component type T that entities must have to be
+		// considered by the system
+		template <typename T> void RequireComponent();
+};
+
+// Implementations of the function template
+template <typename T> void System::RequireComponent()
+{
+	const auto componentId = Component<T>::GetId();
+	componentSignature.set(componentId);
+}
+
+
+// --------------------------------
 // System Component Signatures
 // --------------------------------
 
