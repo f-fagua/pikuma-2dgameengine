@@ -20,15 +20,10 @@ void System::AddEntityToSystem(Entity entity) {
 }
 
 void System::RemoveEntityFromSystem(Entity entity) {
-	int index = -1;
-
-	for (int i = 0; index == -1 && i < entities.size(); i++) {
-		if (entity.GetId() == entities[i].GetId())
-			index = i;
-	}
-
-	if (index != -1)
-		entities.erase(entities.begin() + index);
+	
+	entities.erase(std::remove_if(entities.begin(), entities.end(), [&entity](Entity other) {
+		return entity.GetId() == other.GetId();
+	}), entities.end());
 }
 		
 std::vector<Entity> System::GetSystemEntities() const {
