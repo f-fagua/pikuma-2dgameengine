@@ -7,7 +7,8 @@ COMPILER_FLAGS = -Wall -Wfatal-errors
 INCLUDE_PATH = -I"./libs/" -I/opt/homebrew/include
 SRC_FILES = ./src/*.cpp \
 			./src/Game/*.cpp \
-			./src/Logger/*.cpp
+			./src/Logger/*.cpp \
+			./src/ECS/*.cpp 
 LINKER_FLAGS = `sdl2-config --libs --cflags` -L/opt/homebrew/lib -llua -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm
 OBJ_NAME = bin/gameengine
 

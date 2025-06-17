@@ -2,6 +2,7 @@
 #define ECS_H
 
 #include <bitset>
+#include <vector>
 
 const unsigned int MAX_COMPONENTS = 32;
 
@@ -61,7 +62,7 @@ class System {
 		~System() = default;
 
 		void AddEntityToSystem(Entity entity);
-		void RemoveEntityFromSystem();
+		void RemoveEntityFromSystem(Entity entity);
 		std::vector<Entity> GetSystemEntities() const;
 		const Signature& GetComponentSignature() const;
 

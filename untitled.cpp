@@ -1,4 +1,31 @@
 // --------------------------------
+// Templates as Placeholders
+// --------------------------------
+
+template <typename T>
+T Max(T a, T b) {
+	if (a > b) {
+		return a;
+	}
+	return b;
+}
+
+template <typename T>
+T min(T a, T b) {
+	if (a < b) {
+		return a;
+	}
+	return b;
+}
+
+int main(int argc, char *args[]) {
+	std::cout << "Max(ints)		= " << Max(8, 5)		<< std::endl;
+	std::cout << "Max(doubles)	= " << Max(3.3, -4.5)	<< std::endl;
+	std::cout << "Max(chars)	= " << Max('g', 'h')	<< std::endl; 
+}
+
+
+// --------------------------------
 // Working with C++ Templates
 // --------------------------------
 
