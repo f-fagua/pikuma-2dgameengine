@@ -1,3 +1,35 @@
+////////////////////////////////////////////////////////////////////////////////
+// Registry
+////////////////////////////////////////////////////////////////////////////////
+// The Registry manages the creation and destruction of entities, as well as
+// adding sustems and adding components to entities.
+////////////////////////////////////////////////////////////////////////////////
+class Registry {
+	
+	private:
+		// Keep track of how many entities were added to the scene
+		int numEntities = 0;
+
+		// Vector of comopnent pools.
+		// each pool contains all the data for a certain component type
+		// [vector index = componentId], [pool index = entity]
+		std::vector<Pool*> componentPool;
+	public:
+		Registry() = default;
+
+		// Management of entities, systems, and components
+		Entity CreateEntity();
+		void KillEntity(Entity entity);
+		void AddSystem(...);
+		void AddComponent(...);
+		void RemoveComponent(...);
+		...
+		...
+		...
+
+};
+
+
 // --------------------------------
 // Templates as Placeholders
 // --------------------------------
