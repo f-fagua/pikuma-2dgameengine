@@ -42,11 +42,18 @@ class Registry {
 		// Keep track of how many entities were added to the scene
 		int numEntities = 0;
 
-		// Vecotr of component pools.
+		// Vector of component pools.
 		// each pool contains all the data for a certain component type
 		// [vector index = componentId], [pool index = entityId]
 		std::vector<Pool*> componentPools;
 
+		// Vector of component signatures.
+		// The signatures lets us know which components are turned "on" fir an entity
+		// [vector index = entity id]
+		std::vector<Signature> entityComponentSignatures;
+
+		// Map of active systems [index = system typeid]
+		std::unordered_map<std::type_index, System*> systems;
 	public:
 		Registry() = default;
 
