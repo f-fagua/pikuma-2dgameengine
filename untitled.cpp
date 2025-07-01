@@ -41,6 +41,8 @@ class Registry {
 	private:
 		// Keep track of how many entities were added to the scene
 		int numEntities = 0;
+		std::set<Entity> entitiesToBeAdded; 	// Entities awaiting creation in the next Registry Update()
+		std::set<Entity> entitiesToBeKilled; 	// Entities awaiting destruction in the next Registry Update()
 
 		// Vector of component pools.
 		// each pool contains all the data for a certain component type
@@ -54,6 +56,7 @@ class Registry {
 
 		// Map of active systems [index = system typeid]
 		std::unordered_map<std::type_index, System*> systems;
+
 	public:
 		Registry() = default;
 
@@ -69,6 +72,23 @@ class Registry {
 
 };
 
+Entity Registry::CreateEntity() {
+	int entityId = numEntities++;
+	if (entityId >= entityComponentSignatures.size()) {
+		entityComponentSignatures.resize(entityId + 1);
+	} 
+	Entity entity(entityId);
+	entitiesToBeAdded.insert(entity);
+	return entity;
+}
+
+
+void Registry::Update() {
+	// Here is where we actually insert/delete the entities that are waiting to be added/removed.
+	// We do this because we don't want to confuse our Systems by adding/removing entities in the middle
+	// of the frame logic. Therefore, we wait until the end of the frame to update and perform the
+	// creating and deletion of entities
+}
 
 // --------------------------------
 // Templates as Placeholders

@@ -28,3 +28,10 @@ std::vector<Entity> System::GetSystemEntities() const {
 const Signature& System::GetComponentSignature() const {
 	return componentSignature;
 }
+
+//////////////////////////////////////////////////////////////////////
+// Registry
+//////////////////////////////////////////////////////////////////////
+Entity Registry::CreateEntity() {
+	
+}
