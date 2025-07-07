@@ -172,7 +172,8 @@ class Registry {
 		
 		Entity CreateEntity();
 		
-		// void AddComponent<T>(...);
+		// Function template to add a component of type T to a given entity
+		template <typename T, typename ...TArgs> void AddComponent<T>(Entity entity, TArgs&& ...args);
 
 		void AddEntityToSystem(Entity entity);
 

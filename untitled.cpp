@@ -1,4 +1,52 @@
 ////////////////////////////////////////////////////////////////////////////////
+// Adding Components
+////////////////////////////////////////////////////////////////////////////////
+
+class Registry {
+...
+	public:
+		...
+
+		// AddComponent<T>(entity, ...)
+		template <typename t, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
+
+}
+
+template<typename T, typename ...TArgs>
+void Registry::AddComponent(Entity entity, TArgs&& ...args) {
+	const auto componentId = Component<T>::GetId();
+	const auto entityId = entity.GetId();
+
+	// If the component id is greater than the current size of the componentPools, then resize the vector
+	if (componentId >= componentPools.size()) {
+		componentPools.resize(componentId + 1, nullptr)
+	}
+
+	// If we still don't have a Pool for that component type
+	if (!componentPools(componentId)) {
+		Pool<T>* newComponentPool = new Pool<T>();
+		componentPools[componentId] = newComponentPool;
+	}
+
+	// Get the pool of component values for that component type
+	Pool<T>* componentPool = Pool<T>(componentPools[componentId]);
+
+	// If the entity id is greater than the current size of the component pool, then resize the pool
+	if (entityId >= componentPool->GetSize()) {
+		componentPool->Resize(numEntities);
+	}
+
+	// Create a new Component object of the type T, and forward the various parameter to the component constructor
+	T newComponent(std::forward<TArgs>(args)...);
+
+	// Add the new component to the component pool listm usign the ent
+	componentPool->Set(entityId, newComponent);
+
+	// Finally, change the component signature of the entity and set the component id on the bitset to 1
+	entityComponentSignatures[entityId].set(componentId);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Managing Components
 ////////////////////////////////////////////////////////////////////////////////
 
