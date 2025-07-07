@@ -1,4 +1,35 @@
 ////////////////////////////////////////////////////////////////////////////////
+// Managing Components
+////////////////////////////////////////////////////////////////////////////////
+
+registry.AddComponent<TransformComponent>(entity, glm::vec2(10.0, 20.0), glm::vec2(1.0,1.0), 0.0);
+
+registry.AddComponent<SpriteComponent>(entity, "./assets/images/tank.png");
+
+registry.RemoveComponent<TransformComponent>(entity);
+
+registry.HasComponent<TransformComponent>(entity);
+
+registry.GetComponent<TransformComponent>(entity);
+
+class Registry {
+...
+	public:
+		...
+
+		// AddComponent<T>(entity, ...)
+		template <typename t, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
+
+		// RemoveComponent<T>(entity);
+		template <typename T> void RemoveComponent(Entity entity);
+
+		// HasComponent<T>(entity);
+		template <typename T> bool HasComponent(Entity entity) const;
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 // Pool
 ////////////////////////////////////////////////////////////////////////////////
 // A pool is just a vector (contiguuous data) of objects of type T
