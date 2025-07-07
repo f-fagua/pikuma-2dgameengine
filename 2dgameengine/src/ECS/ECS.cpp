@@ -1,4 +1,5 @@
 #include "ECS.h"
+#include "../Logger/Logger.h"
 
 //////////////////////////////////////////////////////////////////////
 // Entity
@@ -33,5 +34,27 @@ const Signature& System::GetComponentSignature() const {
 // Registry
 //////////////////////////////////////////////////////////////////////
 Entity Registry::CreateEntity() {
+	int entityId;
 	
+	entityId = numEntities++;
+	
+	Entity entity(entityId);
+	entitiesToBeAdded.insert(entity);
+	
+	Logger::Log("Entity created with id = " + std::to_string(entityId));
+
+	return entity;
+
+
+//	if (entityId >= entityComponentSignatures.size()) {
+//		entityComponentSignatures.resize(entityId + 1);
+//	}
+
+	
+//	return entity;
+}
+
+void Registry::Update() {
+	// TODO: Add the entitites that are waiting to be created to the active Systems
+	// TODO: Remove the entities that are waiting to be removed from the active Systems
 }

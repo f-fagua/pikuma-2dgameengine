@@ -161,22 +161,28 @@ class Registry {
 		// Map of active systems [index = system typeid]
 		std::unordered_map<std::type_index, System*> systems;
 
+		// Set of entities that are flagged to be added or removed in the next registry Update()
+		std::set<Entity> entitiesToBeAdded;
+		std::set<Entity> entitiesToBeKilled;
+
 	public:
 		Registry() = default;
 
-		// Management of entities, systems, and components
-		//
-		// TODO:
-		// 
+		void Update();
+		
 		Entity CreateEntity();
+		
+		// void AddComponent<T>(...);
+
+		void AddEntityToSystem(Entity entity);
+
 		// void KillEntity(Entity entity);
-		//
-		void AddComponent(Entity entity);
+		//		
 		// void RemoveComponent(Entity entity);
 		// bool HasComponent(Entity entity)
-		Component GetCompoent(Entity entity)
+		// Component GetCompoent(Entity entity)
 		//
-		void AddSystem(System system)
+		// void AddSystem(System system)
 		// void RemoveSystem(System system)
 		// bool HasSystem(System)
 		// Sysyem* GetSystem()
