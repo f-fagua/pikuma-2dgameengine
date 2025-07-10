@@ -176,12 +176,15 @@ class Registry {
 		
 		// Component management
 		template <typename TComponent, ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
+		
+		void RemoveComponent(Entity entity);
+		bool HasComponent(Entity entity)
 
 		//void AddEntityToSystem(Entity entity);
 
 		// void KillEntity(Entity entity);
 		//		
-		// void RemoveComponent(Entity entity);
+		// 
 		// bool HasComponent(Entity entity)
 		// Component GetCompoent(Entity entity)
 		//
@@ -223,6 +226,9 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 	TComponent newComponent(std::forward<TArgs>(args)...);
 
 	componentPool->Set(entityId, newComponent);
+
+	entityComponentSignatures[entity]set(componentId);
+
 }
 
 

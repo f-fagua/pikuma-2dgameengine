@@ -1,4 +1,38 @@
 ////////////////////////////////////////////////////////////////////////////////
+// Removing Components
+////////////////////////////////////////////////////////////////////////////////
+
+class Registry {
+...
+	public:
+		...
+		// Ask to RemoveComponent<T> from an entity
+		template <typename TComponent> void RemoveComponent(Entity enitty);
+		
+		// Checks if and entity HasComponent<T>
+		template <typename TComponent> bool HasComponent(Entity enitty);
+
+}
+
+template <typename TComponent> 
+void Registry::RemoveComponent(Entity entity)
+{
+	const auto componentId = Component<T>::GetId();
+	const auto entityId = entity.GetId();
+
+	entityComponentSignatures[entityId].set(componentId, false);
+
+}
+
+template <typename TComponent> 
+bool Registry::HasComponent(Entity entity)
+{
+	const auto componentId = Component<T>::GetId();
+	const auto entityId = entity.GetId();
+
+	return entityComponentSignatures[entityId].test(componentId);
+}
+////////////////////////////////////////////////////////////////////////////////
 // Adding Components
 ////////////////////////////////////////////////////////////////////////////////
 
