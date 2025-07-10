@@ -168,14 +168,16 @@ class Registry {
 	public:
 		Registry() = default;
 
+		// The registry Update finally processes the entities that are waiting to be added/killed
 		void Update();
 		
+		// Entity management
 		Entity CreateEntity();
 		
-		// Function template to add a component of type T to a given entity
-		template <typename T, typename ...TArgs> void AddComponent<T>(Entity entity, TArgs&& ...args);
+		// Component management
+		template <typename TComponent, ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
 
-		void AddEntityToSystem(Entity entity);
+		//void AddEntityToSystem(Entity entity);
 
 		// void KillEntity(Entity entity);
 		//		
@@ -197,5 +199,31 @@ void System::RequireComponent()
 	const auto componentId = Component<TComponent>::GetId();
 	componentSignature.set(componentId);
 }
+
+template <typename TComponent, ...TArgs> 
+void Registry::AddComponent(Entity entity, TArgs&& ...args) {
+	const auto componentId = Component<TComponent>::GetId();
+	const auto entityId = entity.GetId();
+
+	if (componentId >= componentPools.size()) {
+		componentPools.resize(componentId + 1, nullptr);
+	}
+
+	if (!componentPools[componentId]) {
+		Pool<TComponent>* newComponentPool = new Pool<TComponent>();
+		componentPools[componentId] = newComponent;
+	}
+
+	Pool<TComponent>* componentPool = componentPools[componentId];
+
+	if (entityId >= componentPool->GetSize()){
+		componentPool->Resize(numEntities);
+	}
+
+	TComponent newComponent(std::forward<TArgs>(args)...);
+
+	componentPool->Set(entityId, newComponent);
+}
+
 
 #endif
