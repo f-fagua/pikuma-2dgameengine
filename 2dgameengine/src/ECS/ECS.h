@@ -179,27 +179,45 @@ class Registry {
 		template <typename TComponent> void RemoveComponent(Entity entity);
 		template <typename TComponent> void HasComponent(Entity entity) const;
 	
-		//void AddEntityToSystem(Entity entity);
+		// System management
+		template <typename TSystem, ...TArgs> void AddSystem(TArgs&& ...args);
+		template <typename TSystem> void RemoveSystem();
+		template <typename TSystem> bool HasSystem() const;
+		template <typename TSystem> TSystem& GetSystem() const;
 
-		// void KillEntity(Entity entity);
-		//		
-		// 
-		// bool HasComponent(Entity entity)
-		// Component GetCompoent(Entity entity)
-		//
-		// void AddSystem(System system)
-		// void RemoveSystem(System system)
-		// bool HasSystem(System)
-		// Sysyem* GetSystem()
-
+		// Checks the component signature of an entity and add the entity to the systems 
+		// that are interested in it
+		void AddEntityToSystems(Entity entity);
 };
 
 // Implementations of the function template
-template <typename TComponent> 
-void System::RequireComponent()
-{
+void System::RequireComponent() {
 	const auto componentId = Component<TComponent>::GetId();
 	componentSignature.set(componentId);
+}
+
+template <typename TSystem, ...TArgs> 
+void Registry::AddSystem(TArgs&& ...args) {
+	TSystem* newSystem(new TSystem(std::forward<TArgs>(args)...));
+	systems.insert(std::make_pair(std::type_index(typeId(TSystem)), newSystem));	
+}
+
+template <typename TSystem> 
+void Registry::RemoveSystem() {
+	auto system = systems.find(std::type_index(typeId(TSystem)));
+	systems.erase(system);	
+}
+
+template <typename TSystem> 
+void Registry::HasSystem() const {
+	auto system = systems.find(std::type_index(typeId(TSystem)));
+	return system != systems.end();
+}
+
+template <typename TSystem> 
+TSystem& Registry::GetSystem() const {
+	auto system = systems.find(std::type_index(typeId(TSystem)));
+	return *(std::static_pointer_cast<TSystem> (system->second));
 }
 
 template <typename TComponent, ...TArgs> 

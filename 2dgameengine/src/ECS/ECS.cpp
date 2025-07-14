@@ -46,17 +46,23 @@ Entity Registry::CreateEntity() {
 	Logger::Log("Entity created with id = " + std::to_string(entityId));
 
 	return entity;
-
-
-//	if (entityId >= entityComponentSignatures.size()) {
-//		entityComponentSignatures.resize(entityId + 1);
-//	}
-
-	
-//	return entity;
 }
 
+void Registry::AddEntityToSystems(Entity entity) {
+	const auto entityId = entity.GetId();
 
+	const auto& entityComponentSignature = entityComponentSignatures[entityId];
+	
+	for (auto& system: systems) {
+		const auto& systemComponentSignature = system.second->GetComponentSignature();
+
+		bool isInterested = (entityComponentSignature & systemComponentSignature) == systemComponentSignature;
+
+		if (isInterested) {
+			system.second->AddEntityToSystem(entity);
+		}
+	}
+}
 
 void Registry::Update() {
 	// TODO: Add the entitites that are waiting to be created to the active Systems
