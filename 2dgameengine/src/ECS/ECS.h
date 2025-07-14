@@ -176,10 +176,9 @@ class Registry {
 		
 		// Component management
 		template <typename TComponent, ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
-		
-		void RemoveComponent(Entity entity);
-		bool HasComponent(Entity entity)
-
+		template <typename TComponent> void RemoveComponent(Entity entity);
+		template <typename TComponent> void HasComponent(Entity entity) const;
+	
 		//void AddEntityToSystem(Entity entity);
 
 		// void KillEntity(Entity entity);
@@ -228,8 +227,20 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 	componentPool->Set(entityId, newComponent);
 
 	entityComponentSignatures[entity]set(componentId);
-
 }
 
+template <typename TComponent> 
+void RemoveComponent(Entity entity) {
+	const auto componentId = Component<TComponent>::GetId();
+	const auto entityId = entity.GetId();
+	entityComponentSignatures.set(componentId, false);
+}
+
+template <typename TComponent> 
+void HasComponent(Entity entity) const {
+	const auto componentId = Component<TComponent>::GetId();
+	const auto entityId = entity.GetId();
+	return entityComponentSignatures[entityId].test(componentId);
+}
 
 #endif
