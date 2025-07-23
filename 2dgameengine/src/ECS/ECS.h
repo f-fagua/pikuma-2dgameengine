@@ -1,10 +1,12 @@
 #ifndef ECS_H
 #define ECS_H
 
-#include <bitset>
 #include <vector>
+#include <bitset>
+#include <set>
 #include <unordered_map>
 #include <typeindex>
+#include <memory>
 
 const unsigned int MAX_COMPONENTS = 32;
 
@@ -175,12 +177,12 @@ class Registry {
 		Entity CreateEntity();
 		
 		// Component management
-		template <typename TComponent, ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
+		template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
 		template <typename TComponent> void RemoveComponent(Entity entity);
 		template <typename TComponent> void HasComponent(Entity entity) const;
 	
 		// System management
-		template <typename TSystem, ...TArgs> void AddSystem(TArgs&& ...args);
+		template <typename TSystem, typename ...TArgs> void AddSystem(TArgs&& ...args);
 		template <typename TSystem> void RemoveSystem();
 		template <typename TSystem> bool HasSystem() const;
 		template <typename TSystem> TSystem& GetSystem() const;
@@ -191,36 +193,36 @@ class Registry {
 };
 
 // Implementations of the function template
+template <typename TComponent>
 void System::RequireComponent() {
 	const auto componentId = Component<TComponent>::GetId();
 	componentSignature.set(componentId);
 }
 
-template <typename TSystem, ...TArgs> 
+template <typename TSystem, typename ...TArgs> 
 void Registry::AddSystem(TArgs&& ...args) {
 	TSystem* newSystem(new TSystem(std::forward<TArgs>(args)...));
-	systems.insert(std::make_pair(std::type_index(typeId(TSystem)), newSystem));	
+	systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));	
 }
 
 template <typename TSystem> 
 void Registry::RemoveSystem() {
-	auto system = systems.find(std::type_index(typeId(TSystem)));
+	auto system = systems.find(std::type_index(typeid(TSystem)));
 	systems.erase(system);	
 }
 
 template <typename TSystem> 
-void Registry::HasSystem() const {
-	auto system = systems.find(std::type_index(typeId(TSystem)));
-	return system != systems.end();
+bool Registry::HasSystem() const {
+	return systems.find(std::type_index(typeid(TSystem))) != systems.end();
 }
 
 template <typename TSystem> 
 TSystem& Registry::GetSystem() const {
-	auto system = systems.find(std::type_index(typeId(TSystem)));
+	auto system = systems.find(std::type_index(typeid(TSystem)));
 	return *(std::static_pointer_cast<TSystem> (system->second));
 }
 
-template <typename TComponent, ...TArgs> 
+template <typename TComponent, typename ...TArgs> 
 void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 	const auto componentId = Component<TComponent>::GetId();
 	const auto entityId = entity.GetId();
@@ -231,7 +233,7 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 
 	if (!componentPools[componentId]) {
 		Pool<TComponent>* newComponentPool = new Pool<TComponent>();
-		componentPools[componentId] = newComponent;
+		componentPools[componentId] = newComponentPool;
 	}
 
 	Pool<TComponent>* componentPool = componentPools[componentId];
@@ -244,18 +246,18 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 
 	componentPool->Set(entityId, newComponent);
 
-	entityComponentSignatures[entity]set(componentId);
+	entityComponentSignatures[entityId].set(componentId);
 }
 
 template <typename TComponent> 
-void RemoveComponent(Entity entity) {
+void Registry::RemoveComponent(Entity entity) {
 	const auto componentId = Component<TComponent>::GetId();
 	const auto entityId = entity.GetId();
-	entityComponentSignatures.set(componentId, false);
+	entityComponentSignatures[entityId].set(componentId, false);
 }
 
 template <typename TComponent> 
-void HasComponent(Entity entity) const {
+void Registry::HasComponent(Entity entity) const {
 	const auto componentId = Component<TComponent>::GetId();
 	const auto entityId = entity.GetId();
 	return entityComponentSignatures[entityId].test(componentId);
